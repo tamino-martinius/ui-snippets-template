@@ -1,6 +1,10 @@
-import { resolve } from 'path';
+const {
+  resolve
+} = require('path');
 
-export const buildPath = resolve(__dirname, '..', 'build' );
-export const publicPath = resolve(__dirname, '..', 'public' );
-export const sourcePath = resolve(__dirname, '..', 'src');
-export const scriptPath = resolve(__dirname, '..', 'scripts' );
+module.exports = {
+  buildPath: resolve(__dirname, '..', 'build'),
+  publicPath: resolve(__dirname, '..', 'public'),
+  sourcePath: resolve(__dirname, '..', 'src'),
+  scriptPath: resolve(__dirname, '..', 'scripts'),
+};

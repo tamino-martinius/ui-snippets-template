@@ -1,7 +1,10 @@
-import { publicPath, sourcePath } from './paths';
-import webpack  from 'webpack';
-import HtmlWebpackPlugin  from 'html-webpack-plugin';
-import ExtractTextPlugin  from 'extract-text-webpack-plugin';
+const {
+  publicPath,
+  sourcePath
+} = require('./paths');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 console.log('publicPath', publicPath);
 console.log('sourcePath', sourcePath);
@@ -10,7 +13,7 @@ const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000;
 const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
 const host = process.env.HOST || 'localhost';
 
-export const config = {
+const config = {
   devtool: 'inline-source-map',
   output: {
     pathinfo: true,
@@ -36,8 +39,7 @@ export const config = {
     new webpack.NoEmitOnErrorsPlugin(),
   ],
   module: {
-    rules: [
-      {
+    rules: [{
         enforce: 'pre',
         test: /\.js$/,
         loader: 'source-map-loader',
@@ -57,22 +59,19 @@ export const config = {
       },
       {
         test: /\.ts$/,
-        use: [
-          {
-            loader: 'ts-loader',
-            options: {
-              happyPackMode: true,
-            },
+        use: [{
+          loader: 'ts-loader',
+          options: {
+            happyPackMode: true,
           },
-        ],
+        }, ],
         include: sourcePath,
         exclude: /node_modules/,
       },
       {
         test: /\.css$/i,
         include: sourcePath,
-        use: [
-          {
+        use: [{
             loader: 'style-loader',
           },
           {
@@ -106,4 +105,4 @@ export const config = {
   },
 };
 
-export default config;
+module.exports = config;

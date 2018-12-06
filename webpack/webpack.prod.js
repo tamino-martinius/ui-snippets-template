@@ -1,27 +1,26 @@
-import { publicPath, sourcePath }  from './paths';
-import webpack  from 'webpack';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import CompressionWebpackPlugin from 'compression-webpack-plugin';
-import UglifyJSPlugin from 'uglifyjs-webpack-plugin';
+const {
+  publicPath,
+  sourcePath
+} = require('./paths');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CompressionWebpackPlugin = require('compression-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 console.log('publicPath', publicPath);
 console.log('sourcePath', sourcePath);
 
-export const config = {
+const config = {
   bail: true, // Don't attempt to continue if there are any errors.
   devtool: 'source-map',
   optimization: {
     minimize: true,
     minimizer: [
-      new UglifyJSPlugin({
-        sourceMap: true,
-        uglifyOptions: {
-          // https://github.com/mishoo/UglifyJS2/tree/harmony#compress-options
-          beautify: false,
+      new TerserPlugin({
+        parallel: true,
+        terserOptions: {
           ecma: 6,
-          comments: false,
-          mangle: false,
         },
       }),
     ],
@@ -55,7 +54,7 @@ export const config = {
       allChunks: true
     }),
     new CompressionWebpackPlugin({
-      asset: "[path].gz[query]",
+      filename: "[path].gz[query]",
       algorithm: "gzip",
       test: /\.(js|html|css)$/,
       threshold: 10240,
@@ -63,8 +62,7 @@ export const config = {
     }),
   ],
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.html?$/,
         loader: 'raw-loader',
         include: sourcePath,
@@ -80,14 +78,12 @@ export const config = {
       },
       {
         test: /\.ts$/,
-        use: [
-          {
-            loader: 'ts-loader',
-            options: {
-              happyPackMode: true,
-            },
+        use: [{
+          loader: 'ts-loader',
+          options: {
+            happyPackMode: true,
           },
-        ],
+        }, ],
         include: sourcePath,
         exclude: /node_modules/,
       },
@@ -96,8 +92,7 @@ export const config = {
         include: sourcePath,
         loader: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: [
-            {
+          use: [{
               loader: 'css-loader',
               options: {
                 sourceMap: true,
@@ -130,4 +125,4 @@ export const config = {
   },
 };
 
-export default config;
+module.exports = config;

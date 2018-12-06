@@ -1,8 +1,12 @@
-import { sourcePath, buildPath, scriptPath } from './paths';
-import CopyWebpackPlugin from 'copy-webpack-plugin';
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+const {
+  sourcePath,
+  buildPath,
+  scriptPath
+} = require('./paths');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
-export const config = {
+const config = {
   target: 'web',
   entry: {
     'bundle': [
@@ -25,12 +29,13 @@ export const config = {
     },
   },
   plugins: [
-    new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
+    new ForkTsCheckerWebpackPlugin({
+      checkSyntacticErrors: true
+    }),
     new CopyWebpackPlugin(
-      [
-        { from: 'public' },
-      ],
-      {
+      [{
+        from: 'public'
+      }, ], {
         ignore: [
           // Boilerplate will not be copied
           'index.html',
@@ -40,4 +45,4 @@ export const config = {
   ],
 };
 
-export default config;
+module.exports = config;
